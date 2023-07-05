@@ -7,22 +7,28 @@ pub trait Ahrs<N: Scalar + SimdValue> {
     /// `accelerometer`, and `magnetometer`.
     ///
     /// Returns a reference to the updated quaternion on success, or in the case of failure, an
-    /// `Err(&str)` containing the reason.
+    /// `Err(Error)` containing the reason.
     fn update(
         &mut self,
         gyroscope: &Vector3<N>,
         accelerometer: &Vector3<N>,
         magnetometer: &Vector3<N>,
-    ) -> Result<&UnitQuaternion<N>, &str>;
+    ) -> Result<&UnitQuaternion<N>, Error>;
 
     /// Attempts to update the current state quaternion using 6dof IMU values, made up by `gyroscope` &
     /// `accelerometer`.
     ///
     /// Returns a reference to the updated quaternion on success, or in the case of failure, an
-    /// `Err(&str)` containing the reason.
+    /// `Err(Error)` containing the reason.
     fn update_imu(
         &mut self,
         gyroscope: &Vector3<N>,
         accelerometer: &Vector3<N>,
-    ) -> Result<&UnitQuaternion<N>, &str>;
+    ) -> Result<&UnitQuaternion<N>, Error>;
+}
+
+#[derive(Debug)]
+pub enum Error {
+    /// Division by zero
+    DivByZero,
 }
